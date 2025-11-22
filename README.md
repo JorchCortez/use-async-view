@@ -115,52 +115,201 @@ The hook returns an object with the following properties:
 | `error` | `unknown` | The error object if loading failed, or null |
 | `reload` | `() => void` | Function to manually trigger a reload of the data |
 
-## React Native Components
+## Reusable Components
 
-The hook comes with pre-built React Native components that use native UI elements:
+The library includes pre-built, customizable components for both React Web and React Native that you can use with the hook or independently in your application.
 
-### NativeLoadingView
+| Component | Platform | Purpose | Key Features |
+|-----------|----------|---------|--------------|
+| `LoadingView` | Web | Loading state | Default spinner, customizable text & loader |
+| `ErrorView` | Web | Error state | Error message, expandable details, retry button |
+| `NativeLoadingView` | React Native | Loading state | ActivityIndicator, customizable color & size |
+| `NativeErrorView` | React Native | Error state | Native styling, collapsible details, TouchableOpacity button |
 
-Uses `ActivityIndicator` from React Native with customizable options:
+### Web Components
+
+#### LoadingView
+
+A flexible loading component with a default spinner and customizable text.
+
+```tsx
+import { LoadingView } from './components/LoadingView';
+
+// Basic usage
+<LoadingView />
+
+// With custom text
+<LoadingView text="Loading your data..." />
+
+// With custom loader
+<LoadingView 
+  text="Please wait..."
+  loader={<MyCustomSpinner />}
+/>
+
+// Show loader explicitly
+<LoadingView showLoader={true} text="Loading..." />
+```
+
+**Props:**
+- `text?: string` - Loading text to display (default: "Loading...")
+- `showLoader?: boolean` - Whether to show the default spinner
+- `loader?: ReactNode` - Custom loader component to replace the default spinner
+
+**Styling:**
+The component uses the following CSS classes that you can style:
+- `.loading-view` - Container div
+- `.default-loader` - Default spinner container
+- `.spinner` - Spinner element
+- `.loading-text` - Text paragraph
+
+#### ErrorView
+
+A comprehensive error display component with expandable error details and retry functionality.
+
+```tsx
+import { ErrorView } from './components/ErrorView';
+
+// Basic usage
+<ErrorView message="Failed to load data" />
+
+// With error details
+<ErrorView 
+  message="Failed to load data"
+  error={error}
+/>
+
+// With retry function
+<ErrorView 
+  message="Failed to load data"
+  error={error}
+  runFunction={handleRetry}
+/>
+```
+
+**Props:**
+- `message: string` - Error message to display (required)
+- `error?: Error` - Error object (shows expandable details if provided)
+- `runFunction?: () => void` - Function to call when "Try again" button is clicked
+
+**Features:**
+- Displays error message prominently
+- Collapsible `<details>` element showing error stack trace
+- Optional "Try again" button for retry functionality
+- Red color scheme for visual error indication
+
+### React Native Components
+
+#### NativeLoadingView
+
+Uses React Native's `ActivityIndicator` with customizable styling and text.
 
 ```tsx
 import { NativeLoadingView } from './components/NativeLoadingView';
 
-// Use with custom props
+// Basic usage
+<NativeLoadingView />
+
+// With custom text and color
 <NativeLoadingView 
   text="Loading data..." 
   color="#007AFF" 
   size="large" 
+/>
+
+// With custom loader
+<NativeLoadingView 
+  text="Please wait..."
+  loader={<MyCustomLoader />}
 />
 ```
 
 **Props:**
 - `text?: string` - Loading text to display (default: "Loading...")
 - `showLoader?: boolean` - Whether to show the activity indicator (default: true)
-- `loader?: ReactNode` - Custom loader component
+- `loader?: ReactNode` - Custom loader component to replace ActivityIndicator
 - `color?: string` - Color of the ActivityIndicator (default: "#007AFF")
 - `size?: 'small' | 'large'` - Size of the ActivityIndicator (default: "large")
 
-### NativeErrorView
+**Styling:**
+The component uses React Native `StyleSheet` with the following styles:
+- Centered flex layout
+- 20px padding
+- Activity indicator with 12px bottom margin
+- Gray text color (#666)
 
-Provides a native-styled error view with collapsible error details:
+#### NativeErrorView
+
+A native-styled error component with collapsible error details and TouchableOpacity retry button.
 
 ```tsx
 import { NativeErrorView } from './components/NativeErrorView';
 
+// Basic usage
+<NativeErrorView message="Failed to load data" />
+
+// With error details and retry
 <NativeErrorView 
   message="Failed to load data"
   error={error}
   runFunction={reload}
-  buttonText="Try Again"
+/>
+
+// With custom button text
+<NativeErrorView 
+  message="Network error"
+  error={error}
+  runFunction={reload}
+  buttonText="Retry Now"
 />
 ```
 
 **Props:**
-- `message: string` - Error message to display
-- `error?: Error` - Error object (optional, can show details)
+- `message: string` - Error message to display (required)
+- `error?: Error` - Error object (shows expandable details with stack trace)
 - `runFunction?: () => void` - Function to call when retry button is pressed
 - `buttonText?: string` - Text for retry button (default: "Try again")
+
+**Features:**
+- Red error title and message (#d32f2f)
+- Expandable error details with toggle button
+- Monospace font for error details
+- Native-styled blue retry button (#007AFF)
+- Touchable details toggle for better UX
+
+### Using Components Independently
+
+All components can be used independently outside of the `useAsyncView` hook:
+
+**Web Example:**
+```tsx
+import { LoadingView, ErrorView } from './components';
+
+function MyComponent() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  if (loading) return <LoadingView text="Fetching data..." />;
+  if (error) return <ErrorView message="Failed to load" error={error} runFunction={retry} />;
+  
+  return <div>Content loaded!</div>;
+}
+```
+
+**React Native Example:**
+```tsx
+import { NativeLoadingView, NativeErrorView } from './components';
+
+function MyComponent() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  if (loading) return <NativeLoadingView text="Fetching data..." color="#FF6B6B" />;
+  if (error) return <NativeErrorView message="Failed to load" error={error} runFunction={retry} />;
+  
+  return <View><Text>Content loaded!</Text></View>;
+}
+```
 
 ## Platform-Specific Usage
 
@@ -281,6 +430,12 @@ The hook manages four distinct states:
 ## Development
 
 This project uses React + TypeScript + Vite.
+
+### Example Files
+
+- `App.tsx` - Web React example
+- `App.native.example.txt` - React Native example (rename to `.tsx` in your React Native project)
+- `REACT_NATIVE_SUPPORT.md` - Detailed React Native implementation guide
 
 ## Expanding the ESLint configuration
 
