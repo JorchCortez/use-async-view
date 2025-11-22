@@ -1,0 +1,250 @@
+/**
+ * Example React Native App using useAsyncView hook
+ * This demonstrates how to use the hook in a React Native application
+ * 
+ * NOTE: This file is for React Native projects only and will show errors
+ * in a web React project. Copy this to your React Native project to use it.
+ * 
+ * @ts-nocheck - Disable type checking as this is an example for React Native
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
+import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useAsyncView } from './hooks/useAsyncView.native';
+import { NativeLoadingView } from './components/NativeLoadingView';
+import { NativeErrorView } from './components/NativeErrorView';
+
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function App() {
+  const loadUserData = async (): Promise<UserData> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Simulate random success/failure
+        if (Math.random() > 0.3) {
+          resolve({
+            id: 1,
+            name: 'John Doe',
+            email: 'john@example.com',
+          });
+        } else {
+          reject(new Error('Network request failed'));
+        }
+      }, 2000);
+    });
+  };
+
+  const { RenderedView, reload, status } = useAsyncView({
+    loadFn: loadUserData,
+    Fallback: () => (
+      <View style={styles.fallbackContainer}>
+        <Text style={styles.fallbackText}>Welcome! Ready to load user data.</Text>
+        <TouchableOpacity style={styles.loadButton} onPress={reload}>
+          <Text style={styles.loadButtonText}>Load Data</Text>
+        </TouchableOpacity>
+      </View>
+    ),
+    Loading: () => <NativeLoadingView text="Loading user data..." color="#007AFF" />,
+    Success: ({ data }: { data: UserData }) => (
+      <View style={styles.successContainer}>
+        <Text style={styles.successTitle}>✓ User Loaded</Text>
+        <View style={styles.userData}>
+          <Text style={styles.label}>ID:</Text>
+          <Text style={styles.value}>{data.id}</Text>
+        </View>
+        <View style={styles.userData}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.value}>{data.name}</Text>
+        </View>
+        <View style={styles.userData}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{data.email}</Text>
+        </View>
+      </View>
+    ),
+    Error: NativeErrorView,
+    auto: false, // Manual loading
+  });
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>UseAsyncView Demo</Text>
+        <Text style={styles.subtitle}>React Native</Text>
+      </View>
+      
+      <View style={styles.statusBar}>
+        <Text style={styles.statusLabel}>Status:</Text>
+        <Text style={[styles.statusValue, getStatusStyle(status)]}>
+          {status.toUpperCase()}
+        </Text>
+      </View>
+
+      <View style={styles.content}>
+        {RenderedView}
+      </View>
+
+      <TouchableOpacity 
+        style={[styles.reloadButton, status === 'loading' && styles.disabledButton]} 
+        onPress={reload}
+        disabled={status === 'loading'}
+      >
+        <Text style={styles.reloadButtonText}>
+          {status === 'loading' ? 'Loading...' : 'Reload'}
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+function getStatusStyle(status: string) {
+  switch (status) {
+    case 'idle':
+      return styles.statusIdle;
+    case 'loading':
+      return styles.statusLoading;
+    case 'success':
+      return styles.statusSuccess;
+    case 'error':
+      return styles.statusError;
+    default:
+      return {};
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    backgroundColor: '#007AFF',
+    padding: 20,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#fff',
+    opacity: 0.9,
+    marginTop: 4,
+  },
+  statusBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  statusLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginRight: 8,
+    color: '#666',
+  },
+  statusValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  statusIdle: {
+    color: '#9e9e9e',
+  },
+  statusLoading: {
+    color: '#2196F3',
+  },
+  statusSuccess: {
+    color: '#4CAF50',
+  },
+  statusError: {
+    color: '#f44336',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  fallbackContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fallbackText: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  loadButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+  },
+  loadButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  successContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  successTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 20,
+  },
+  userData: {
+    flexDirection: 'row',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    width: 80,
+  },
+  value: {
+    fontSize: 16,
+    color: '#333',
+    flex: 1,
+  },
+  reloadButton: {
+    backgroundColor: '#007AFF',
+    margin: 20,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  reloadButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
+
+export default App;
