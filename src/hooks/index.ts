@@ -4,4 +4,4 @@
  */
 
 // Re-export web version by default
-export { useAsyncView, AsyncViewStatus } from './useAsyncView';
+export { useAsyncView } from './useAsyncView';
