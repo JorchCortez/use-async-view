@@ -1,23 +1,35 @@
-import { useState } from 'react'
-import './App.css'
+import { useAsyncView } from './hooks/useAsyncView';
+import { ErrorView } from './components/ErrorView';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const loadSomething = async () => {
+    return new Promise<string>((resolve) => {
+      setTimeout(() => {
+        resolve("Data loaded");
+      }, 2000);
+    });
+  }
+
+  const { RenderedView, reload, status } = useAsyncView({
+    loadFn: loadSomething,
+    Fallback: () => <div>Not loaded yet</div>,
+    Loading: () => <div>Loading...</div>,
+    Success: ({ data }) => <div>{data}</div>,
+    auto: true,
+  });
 
   return (
     <>
-      <h1>Vite + React</h1>
+      <h1>UseAsyncView Test</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <p>Status: {status}</p>
+        {RenderedView}
+        <button onClick={reload}>
+          Reload
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+        <ErrorView message="This is a test error view." runFunction={reload} />
+      </div> 
     </>
   )
 }
