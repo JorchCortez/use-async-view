@@ -31,34 +31,17 @@
  * return <div>{view}</div>;
  * ```
  */
-import { 
-    type ComponentType, 
+import {
     type ReactElement, 
     useEffect, 
     useRef, 
     useState, 
-    useCallback 
+    useCallback, 
+    useMemo
 } from "react";
 import { ErrorView } from "../components/ErrorView";
-
-type Status = "idle" | "loading" | "success" | "error";
-
-export const enum AsyncViewStatus {
-    Idle = "idle",
-    Loading = "loading",
-    Success = "success",
-    Error = "error",
-}
-
-interface UseAsyncViewOptions<T> {
-    loadFn: () => Promise<T>;
-    Fallback: ComponentType;
-    Loading: ComponentType;
-    Success: ComponentType<{ data: T }>;
-    Error?: ComponentType;
-    auto?: boolean;
-}
-
+import { LoadingView } from "../components/LoadingView";
+import { AsyncViewStatus, type StatusType, type UseAsyncViewOptionsType } from "../types/types";
 
 export const useAsyncView = <T,>({
     loadFn,
@@ -67,8 +50,8 @@ export const useAsyncView = <T,>({
     Success,
     Error,
     auto = true,
-}: UseAsyncViewOptions<T>) => {
-    const [status, setStatus] = useState<Status>("idle");
+}: UseAsyncViewOptionsType<T>) => {
+    const [status, setStatus] = useState<StatusType>("idle");
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<unknown>(null);
     const hasRunRef = useRef(false);
@@ -104,10 +87,12 @@ export const useAsyncView = <T,>({
     }, [loadFn]);
 
     let RenderedView: ReactElement;
+    const LoadingComponent = useMemo(() => Loading ?? LoadingView, [Loading]);
+    const FallbackComponent = useMemo(() => Fallback ?? LoadingView, [Fallback]);
 
-    if (status === "loading" || status === "idle") {
-        RenderedView = status === "idle" ? <Fallback /> : <Loading />;
-    } else if (status === "success" && data !== null) {
+    if (status === AsyncViewStatus.Loading || status === AsyncViewStatus.Idle) {
+        RenderedView = status === AsyncViewStatus.Idle ? <FallbackComponent /> : <LoadingComponent />;
+    } else if (status === AsyncViewStatus.Success && data !== null) {
         RenderedView = <Success data={data} />;
     } else {
         RenderedView = Error ? 
