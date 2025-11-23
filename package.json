@@ -22,26 +22,26 @@
     "typescript",
     "data-fetching"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "react-native": "./dist/native.js",
+  "react-native": "./dist/native.cjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "react-native": "./dist/native.js",
+      "react-native": "./dist/native.cjs",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.cjs"
     },
     "./native": {
       "types": "./dist/native.d.ts",
-      "import": "./dist/native.mjs",
-      "require": "./dist/native.js"
+      "import": "./dist/native.native.mjs",
+      "require": "./dist/native.native.cjs"
     },
     "./web": {
       "types": "./dist/web.d.ts",
-      "import": "./dist/web.mjs",
-      "require": "./dist/web.js"
+      "import": "./dist/web.web.mjs",
+      "require": "./dist/web.web.cjs"
     },
     "./package.json": "./package.json"
   },

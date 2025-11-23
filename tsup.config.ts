@@ -15,6 +15,11 @@ export default defineConfig([
     sourcemap: true,
     clean: true,
     outDir: 'dist',
+    outExtension({ format }) {
+      return {
+        js: format === 'esm' ? '.mjs' : '.cjs',
+      };
+    },
     external: ['react', 'react-dom'],
     treeshake: true,
   },
@@ -27,7 +32,7 @@ export default defineConfig([
     outDir: 'dist',
     outExtension({ format }) {
       return {
-        js: format === 'esm' ? '.native.mjs' : '.native.js',
+        js: format === 'esm' ? '.native.mjs' : '.native.cjs',
       };
     },
     external: ['react', 'react-native'],
@@ -48,7 +53,7 @@ export default defineConfig([
     outDir: 'dist',
     outExtension({ format }) {
       return {
-        js: format === 'esm' ? '.web.mjs' : '.web.js',
+        js: format === 'esm' ? '.web.mjs' : '.web.cjs',
       };
     },
     external: ['react', 'react-dom'],
