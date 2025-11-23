@@ -26,6 +26,8 @@ This repository uses GitHub Actions to automatically publish to npm when you cre
 
 ### Automated Publishing (Recommended)
 
+> ⚠️ **IMPORTANT**: You must bump the version before creating a release. npm doesn't allow publishing the same version twice.
+
 1. **Update version in package.json**
    ```bash
    npm version patch  # 1.0.0 → 1.0.1 (bug fixes)
@@ -34,7 +36,7 @@ This repository uses GitHub Actions to automatically publish to npm when you cre
    # or
    npm version major  # 1.0.0 → 2.0.0 (breaking changes)
    ```
-   This creates a git tag automatically.
+   This creates a git tag automatically (e.g., `v1.0.1`).
 
 2. **Push the tag to GitHub**
    ```bash

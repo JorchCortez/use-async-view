@@ -28,6 +28,20 @@ jobs:
       - name: Build package
         run: npm run build
       
+      - name: Check if version exists
+        id: version-check
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          if npm view use-async-view@$PACKAGE_VERSION version 2>/dev/null; then
+            echo "❌ Version $PACKAGE_VERSION already exists on npm"
+            exit 1
+          else
+            echo "✅ Version $PACKAGE_VERSION is available"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:
