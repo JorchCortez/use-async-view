@@ -1,18 +1,69 @@
 {
-  "name": "my-app",
-  "private": true,
-  "version": "0.0.0",
+  "name": "use-async-view",
+  "version": "1.0.0",
+  "description": "A React hook for managing async data loading with automatic view rendering for both React web and React Native",
+  "author": "JorchCortez",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JorchCortez/use-async-view.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "hooks",
+    "async",
+    "loading",
+    "state-management",
+    "typescript",
+    "data-fetching"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "react-native": "./dist/native.js",
+  "exports": {
+    ".": {
+      "react-native": "./dist/native.js",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./native": {
+      "import": "./dist/native.mjs",
+      "require": "./dist/native.js",
+      "types": "./dist/native.d.ts"
+    },
+    "./web": {
+      "import": "./dist/web.mjs",
+      "require": "./dist/web.js",
+      "types": "./dist/web.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "REACT_NATIVE_SUPPORT.md"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsup",
+    "build:vite": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "type-check": "tsc --noEmit"
   },
-  "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-native": "^0.82.1"
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -24,6 +75,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-native": "^0.82.1",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",

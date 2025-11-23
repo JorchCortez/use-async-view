@@ -1,0 +1,48 @@
+# Development files
+src/
+*.tsx
+*.ts
+!*.d.ts
+
+# Build configs
+tsconfig*.json
+vite.config.ts
+tsup.config.ts
+eslint.config.js
+
+# Development dependencies
+node_modules/
+package-lock.json
+
+# Testing
+*.test.*
+*.spec.*
+__tests__/
+coverage/
+
+# Examples and demos
+App.tsx
+App.native.example.txt
+index.html
+public/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+npm-debug.log*
+.env
+.env.local
