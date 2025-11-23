@@ -15,7 +15,19 @@ A custom React hook that manages asynchronous data loading with automatic view r
 ## Installation
 
 ```bash
-npm install
+npm install use-async-view
+```
+
+or with yarn:
+
+```bash
+yarn add use-async-view
+```
+
+or with pnpm:
+
+```bash
+pnpm add use-async-view
 ```
 
 ## Usage
@@ -23,7 +35,7 @@ npm install
 ### Basic Example (React Web)
 
 ```tsx
-import { useAsyncView } from './hooks/useAsyncView';
+import { useAsyncView } from 'use-async-view';
 
 function App() {
   const { RenderedView, reload, status } = useAsyncView({
@@ -51,8 +63,8 @@ function App() {
 ### Basic Example (React Native)
 
 ```tsx
-import { useAsyncView } from './hooks/useAsyncView.native';
-import { NativeLoadingView } from './components/NativeLoadingView';
+import { useAsyncView } from 'use-async-view/native';
+import { NativeLoadingView } from 'use-async-view/native';
 import { View, Text, TouchableOpacity } from 'react-native';
 
 function App() {
@@ -133,7 +145,7 @@ The library includes pre-built, customizable components for both React Web and R
 A flexible loading component with a default spinner and customizable text.
 
 ```tsx
-import { LoadingView } from './components/LoadingView';
+import { LoadingView } from 'use-async-view';
 
 // Basic usage
 <LoadingView />
@@ -168,7 +180,7 @@ The component uses the following CSS classes that you can style:
 A comprehensive error display component with expandable error details and retry functionality.
 
 ```tsx
-import { ErrorView } from './components/ErrorView';
+import { ErrorView } from 'use-async-view';
 
 // Basic usage
 <ErrorView message="Failed to load data" />
@@ -205,7 +217,7 @@ import { ErrorView } from './components/ErrorView';
 Uses React Native's `ActivityIndicator` with customizable styling and text.
 
 ```tsx
-import { NativeLoadingView } from './components/NativeLoadingView';
+import { NativeLoadingView } from 'use-async-view/native';
 
 // Basic usage
 <NativeLoadingView />
@@ -243,7 +255,7 @@ The component uses React Native `StyleSheet` with the following styles:
 A native-styled error component with collapsible error details and TouchableOpacity retry button.
 
 ```tsx
-import { NativeErrorView } from './components/NativeErrorView';
+import { NativeErrorView } from 'use-async-view/native';
 
 // Basic usage
 <NativeErrorView message="Failed to load data" />
@@ -283,7 +295,7 @@ All components can be used independently outside of the `useAsyncView` hook:
 
 **Web Example:**
 ```tsx
-import { LoadingView, ErrorView } from './components';
+import { LoadingView, ErrorView } from 'use-async-view';
 
 function MyComponent() {
   const [loading, setLoading] = useState(true);
@@ -298,7 +310,7 @@ function MyComponent() {
 
 **React Native Example:**
 ```tsx
-import { NativeLoadingView, NativeErrorView } from './components';
+import { NativeLoadingView, NativeErrorView } from 'use-async-view/native';
 
 function MyComponent() {
   const [loading, setLoading] = useState(true);
@@ -315,18 +327,24 @@ function MyComponent() {
 
 ### For React Web Projects
 
-Import from `useAsyncView.tsx`:
 ```tsx
-import { useAsyncView } from './hooks/useAsyncView';
-import { LoadingView, ErrorView } from './components';
+import { useAsyncView, LoadingView, ErrorView } from 'use-async-view';
 ```
 
 ### For React Native Projects
 
-Import from `useAsyncView.native.tsx`:
 ```tsx
-import { useAsyncView } from './hooks/useAsyncView.native';
-import { NativeLoadingView, NativeErrorView } from './components';
+import { useAsyncView, NativeLoadingView, NativeErrorView } from 'use-async-view/native';
+```
+
+Or use explicit imports:
+
+```tsx
+// Web
+import { useAsyncView } from 'use-async-view/web';
+
+// Native
+import { useAsyncView } from 'use-async-view/native';
 ```
 
 ### Advanced Examples
@@ -346,7 +364,7 @@ const { RenderedView, reload, status } = useAsyncView({
 #### Manual Loading Mode (React Native)
 
 ```tsx
-import { useAsyncView } from './hooks/useAsyncView.native';
+import { useAsyncView } from 'use-async-view/native';
 import { TouchableOpacity, Text } from 'react-native';
 
 const { RenderedView, reload } = useAsyncView({
