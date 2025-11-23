@@ -1,5 +1,10 @@
 # useAsyncView Hook
 
+[![npm version](https://badge.fury.io/js/use-async-view.svg)](https://www.npmjs.com/package/use-async-view)
+[![npm downloads](https://img.shields.io/npm/dm/use-async-view.svg)](https://www.npmjs.com/package/use-async-view)
+[![CI](https://github.com/JorchCortez/use-async-view/actions/workflows/ci.yml/badge.svg)](https://github.com/JorchCortez/use-async-view/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A custom React hook that manages asynchronous data loading with automatic view rendering based on the current loading state.
 
 ## Features
@@ -515,3 +520,16 @@ export default defineConfig([
   },
 ])
 ```
+## Contributing
+
+Contributions are welcome! This project uses GitHub Actions for CI/CD.
+
+### Publishing
+
+This package uses automated publishing via GitHub Actions. See [CI_CD_GUIDE.md](./CI_CD_GUIDE.md) for details on the automated workflow.
+
+For manual publishing instructions, see [PUBLISHING.md](./PUBLISHING.md).
+
+## License
+
+MIT © [JorchCortez](https://github.com/JorchCortez)
