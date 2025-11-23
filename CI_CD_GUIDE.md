@@ -26,22 +26,37 @@ This repository uses GitHub Actions to automatically publish to npm when you cre
 
 ### Automated Publishing (Recommended)
 
-> ⚠️ **IMPORTANT**: You must bump the version before creating a release. npm doesn't allow publishing the same version twice.
+> ⚠️ **IMPORTANT**: The workflow uses the code at the git tag. You must bump version, commit, THEN create the tag.
 
-1. **Update version in package.json**
+**Correct workflow:**
+
+1. **Update version and commit**
    ```bash
+   # Option A: Use npm version (does all steps automatically)
    npm version patch  # 1.0.0 → 1.0.1 (bug fixes)
    # or
    npm version minor  # 1.0.0 → 1.1.0 (new features)
    # or
    npm version major  # 1.0.0 → 2.0.0 (breaking changes)
+   
+   # This command does 3 things:
+   # 1. Updates package.json version
+   # 2. Commits the change with message "1.0.1"
+   # 3. Creates a git tag (v1.0.1)
+   
+   # Option B: Manual version bump
+   # 1. Edit package.json manually
+   # 2. git add package.json
+   # 3. git commit -m "chore: bump version to 1.0.1"
+   # 4. git tag v1.0.1
    ```
-   This creates a git tag automatically (e.g., `v1.0.1`).
 
-2. **Push the tag to GitHub**
+2. **Push code and tag together**
    ```bash
-   git push
-   git push --tags
+   git push && git push --tags
+   
+   # Or if using npm version, just:
+   git push --follow-tags
    ```
 
 3. **Create a GitHub Release**
@@ -98,15 +113,33 @@ npm publish
 git add .
 git commit -m "feat: add new feature"
 
-# Bump version (creates git tag)
+# Bump version (updates package.json, commits, creates tag)
 npm version minor  # 1.0.0 → 1.1.0
 
-# Push code and tags
-git push && git push --tags
+# Push code and tags together
+git push --follow-tags
 
 # Go to GitHub and create release from tag
 # → GitHub Actions automatically publishes to npm!
 ```
+
+## ⚠️ Common Mistake to Avoid
+
+**DON'T do this:**
+```bash
+git tag v1.0.1                    # ❌ Tag created BEFORE version change
+git push --tags
+# Edit package.json to 1.0.1      # ❌ Too late! Tag already points to old code
+git commit -m "bump version"
+```
+
+**DO this instead:**
+```bash
+npm version patch                 # ✅ Updates package.json AND creates tag
+git push --follow-tags            # ✅ Pushes both commit and tag together
+```
+
+The tag must point to a commit that has the correct version in package.json!
 
 ## 🔍 Monitoring Builds
 
