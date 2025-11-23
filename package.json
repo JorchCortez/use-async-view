@@ -1,6 +1,6 @@
 {
   "name": "use-async-view",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React hook for managing async data loading with automatic view rendering for both React web and React Native",
   "author": "JorchCortez",
   "license": "MIT",
