@@ -8,6 +8,10 @@
     "type": "git",
     "url": "https://github.com/JorchCortez/use-async-view.git"
   },
+  "homepage": "https://github.com/JorchCortez/use-async-view#readme",
+  "bugs": {
+    "url": "https://github.com/JorchCortez/use-async-view/issues"
+  },
   "keywords": [
     "react",
     "react-native",
@@ -24,20 +28,20 @@
   "react-native": "./dist/native.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "react-native": "./dist/native.js",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./native": {
+      "types": "./dist/native.d.ts",
       "import": "./dist/native.mjs",
-      "require": "./dist/native.js",
-      "types": "./dist/native.d.ts"
+      "require": "./dist/native.js"
     },
     "./web": {
+      "types": "./dist/web.d.ts",
       "import": "./dist/web.mjs",
-      "require": "./dist/web.js",
-      "types": "./dist/web.d.ts"
+      "require": "./dist/web.js"
     },
     "./package.json": "./package.json"
   },
@@ -54,7 +58,6 @@
     "build:vite": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepublishOnly": "npm run build",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
