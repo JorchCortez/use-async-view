@@ -12,7 +12,7 @@
  * @param {boolean} [options.auto=true] - Whether to automatically trigger the load on mount
  * 
  * @returns {Object} Hook return value
- * @returns {ReactElement} returns.view - The rendered view component based on current status
+ * @returns {ReactElement} returns.RenderedView - The rendered view component based on current status
  * @returns {Status} returns.status - Current loading status ('idle' | 'loading' | 'success' | 'error')
  * @returns {T | null} returns.data - The loaded data, or null if not yet loaded
  * @returns {unknown} returns.error - The error object if loading failed, or null
@@ -20,7 +20,7 @@
  * 
  * @example
  * ```tsx
- * const { view, reload, status } = useAsyncView({
+ * const { RenderedView, reload, status } = useAsyncView({
  *   loadFn: () => fetch('/api/data').then(r => r.json()),
  *   Fallback: () => <div>Not loaded yet</div>,
  *   Loading: () => <div>Loading...</div>,
