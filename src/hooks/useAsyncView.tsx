@@ -31,7 +31,7 @@
  * return <div>{view}</div>;
  * ```
  */
-import {
+import React, {
     type ReactElement, 
     useEffect, 
     useRef, 

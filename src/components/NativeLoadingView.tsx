@@ -1,4 +1,4 @@
-import {type FunctionComponent, type ReactNode} from 'react';
+import React, {type FunctionComponent, type ReactNode} from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 interface NativeLoadingViewProps {

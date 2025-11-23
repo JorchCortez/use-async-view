@@ -35,7 +35,7 @@
  * return <View>{RenderedView}</View>;
  * ```
  */
-import { 
+import React, { 
     type ReactElement, 
     useEffect, 
     useRef, 
