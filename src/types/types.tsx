@@ -10,7 +10,7 @@ export const enum AsyncViewStatus {
 }
 
 export interface UseAsyncViewOptionsType<T> {
-    loadFn: () => Promise<T>;
+    loadFn: (signal?: AbortSignal) => Promise<T>;
     Fallback: ComponentType;
     Loading: ComponentType;
     Success: ComponentType<{ data: T }>;

@@ -56,18 +56,30 @@ export const useAsyncView = <T,>({
     const [error, setError] = useState<unknown>(null);
     const hasRunRef = useRef(false);
     const loadFnRef = useRef(loadFn);
+    const isLoadingRef = useRef(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     const run = useCallback(async () => {
+        if (isLoadingRef.current) {
+            return;
+        }
+
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
+        isLoadingRef.current = true;
         setStatus("loading");
         setError(null);
 
         try {
-            const result = await loadFnRef.current();
+            const result = await loadFnRef.current(controller.signal);
             setData(result);
             setStatus("success");
         } catch (err) {
             setError(err);
             setStatus("error");
+        } finally {
+            isLoadingRef.current = false;
         }
     }, []);
 
@@ -85,6 +97,13 @@ export const useAsyncView = <T,>({
     useEffect(() => {
         loadFnRef.current = loadFn;
     }, [loadFn]);
+
+    // Cleanup: abort ongoing request on unmount
+    useEffect(() => {
+        return () => {
+            abortControllerRef.current?.abort();
+        };
+    }, []);
 
     let RenderedView: ReactElement;
     const LoadingComponent = useMemo(() => Loading ?? LoadingView, [Loading]);
