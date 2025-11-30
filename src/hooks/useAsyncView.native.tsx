@@ -60,8 +60,14 @@ export const useAsyncView = <T,>({
     const [error, setError] = useState<unknown>(null);
     const hasRunRef = useRef(false);
     const loadFnRef = useRef(loadFn);
+    const isLoadingRef = useRef(false);
 
     const run = useCallback(async () => {
+        if (isLoadingRef.current) {
+            return;
+        }
+
+        isLoadingRef.current = true;
         setStatus("loading");
         setError(null);
 
@@ -72,6 +78,8 @@ export const useAsyncView = <T,>({
         } catch (err) {
             setError(err);
             setStatus(AsyncViewStatus.Error);
+        } finally {
+            isLoadingRef.current = false;
         }
     }, []);
 
